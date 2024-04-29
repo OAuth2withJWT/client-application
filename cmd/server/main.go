@@ -1,7 +1,13 @@
 package main
 
-import "fmt"
+import (
+	"log"
+
+	"github.com/OAuth2withJWT/client-application/server"
+)
 
 func main() {
-	fmt.Println("Hello, Client Application")
+	s := server.New()
+
+	log.Fatal(s.Run())
 }

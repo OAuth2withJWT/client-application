@@ -5,11 +5,73 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Home Page</title>
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600&display=swap" rel="stylesheet">
-    <link rel="stylesheet" type="text/css" href="/public/index.css">
+    <link rel="stylesheet" type="text/css" href="/public/css/index.css">
 </head>
 <body>
-    <div class="container">
-        <h1>Welcome to GoFocus!</h1>
+    {{ if index .Fields "Username" }}
+    <div class="main-container">
+        <nav class="sidebar">
+          <ul>
+            <li><div class="app-name"><span>PocketPlan</span></div></li>
+            <li><div class="menu-item"><img src="/public/img/profile.png" alt="Profile"><span>{{ index .Fields "Username" }}</span></div></li>
+            <li><a href="#" data-page="home" class="menu-item"><img src="/public/img/home.png" alt="Home"><span>Home</span></a></li>
+            <li><a href="#" data-page="budget" class="menu-item"><img src="/public/img/budget.png" alt="Plan budget"><span>Make plan</span></a></li>
+            <li><a href="#" data-page="about" class="menu-item"><img src="/public/img/info.png" alt="About"><span>About</span></a></li>
+             </ul>
+        </nav>
+        <div class="content">
+          <h2>{{ index .Fields "CurrentMonth" }} Budget Plan</h2>
+          <div class="content-area">
+            <ul class="cards">
+                <li>
+                <span class="info">
+                    <h3><span>$</span><span class="budget_card">{{ index .Fields "MonthlyBudget" }}</span></h3>
+                    <p>Budget</p>
+                </span>
+                </li>
+                <li>
+                <span class="info">
+                    <h3><span>$</span><span class="expenses_card">{{ index .Fields "Expenses" }}</span></h3>
+                    <p>Expenses</p>
+                </span>
+                </li>
+                <li>
+                <span class="info">
+                    <h3><span>$</span><span class="balance_card">{{ index .Fields "Balance" }}</span></h3>
+                    <p>Balance</p>
+                </span>
+                </li>
+            </ul>            
+          </div>
+          <div class="content-area">
+            <ul class="cards">
+              {{ if index .Fields "HealthcareBudget" }}
+                <li>
+                <span class="info">
+                    <h3><span>$</span><span class="budget_card">{{ index .Fields "HealthcareBudget" }}</span></h3>
+                    <p>Healthcare Budget</p>
+                </span>
+                </li>
+              {{ end }}
+              {{ if index .Fields "TravelBudget" }}
+                <li>
+                <span class="info">
+                    <h3><span>$</span><span class="budget_card">{{ index .Fields "TravelBudget" }}</span></h3>
+                    <p>TravelBudget Budget</p>
+                </span>
+                </li>
+              {{ end }}
+            </ul>
+          </div>
+        </div>
     </div>
+    {{ else }}
+    <div class="container">
+        <h1>Welcome to PocketPlan</h1>
+        <h4>Your Personalized Budgeting Partner</h4>
+        <button>Login</button>
+    </div>
+    {{ end }}
+    <script src="/public/js/index.js"></script>
 </body>
 </html>

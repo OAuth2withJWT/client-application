@@ -1,0 +1,172 @@
+body {
+    font-family: 'Roboto', sans-serif;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100%;
+    background: linear-gradient(135deg, #dea674 10%, #7287f2 100%);
+}
+
+.container {
+    width: 600px;
+    padding: 50px;
+    background-color: white;
+    border-radius: 10px;
+    box-shadow:  0 10px 20px rgba(0, 0, 0, 0.3);
+    text-align: center;
+    border: 1px solid rgba(0, 0, 0, 0.1);
+}
+
+.container h1 {
+    color: #000000;
+    font-size: 2.5em;
+    margin-bottom: 10px;
+    text-transform: uppercase;
+}
+
+.container h4 {
+    margin-bottom: 40px;
+}
+
+.container button {
+    width: 100%;
+    padding: 10px 10px;
+    border: none;
+    background-color: #7287f2;
+    color: #fff;
+    cursor: pointer;
+    border-radius: 4px;
+    font-size: 16px;
+    transition: background-color 0.3s ease;
+}
+
+.container button:hover {
+    background-color: #dea674;
+}
+
+.main-container {
+    height: 100%;
+    display: flex;
+    width: 100%;
+}
+  
+.sidebar {
+    width: 200px;
+    background-color: white;
+    border-right: 1px solid #ddd;
+    padding: 0;
+  }
+  
+.sidebar ul {
+    list-style-type: none;
+    padding: 0;
+    margin: 0;
+}
+  
+.sidebar ul li .menu-item,
+.sidebar ul li a.menu-item {
+    display: flex;
+    align-items: center;
+    color: #FD7E14;
+    text-decoration: none;
+    padding: 10px;
+    border-radius: 50px;
+    transition: background-color 0.3s, box-shadow 0.3s;
+}
+
+.sidebar ul li .app-name {
+    display: flex;
+    align-items: center;
+    color: #FD7E14;
+    font-weight: bold;
+    text-transform: uppercase;
+    margin-bottom: 15px;
+    padding: 10px 0;
+}
+
+.sidebar ul li .app-name span {
+    font-size: 25px;
+}
+  
+.sidebar ul li .menu-item:hover,
+.sidebar ul li a.menu-item:hover {
+    background-color: #eef2f8;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+  
+.sidebar ul li img {
+    width: 25px;
+    height: 25px;
+    margin-right: 10px;
+}
+
+.sidebar ul li span {
+    font-size: 18px;
+    padding-top: 5px;
+    color: #FD7E14;
+}
+
+.sidebar ul {
+    margin-top: 5%;
+    margin-left: 10px;
+    margin-right: 10px;
+}
+  
+.content {
+    flex-grow: 1;
+    padding: 20px;
+}
+
+.content h2 {
+    color: #fff;
+    font-size: 35px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+  
+.content-area {
+    border: 1px solid #ddd;
+    padding: 20px;
+    background-color: #f9f9f9;
+    background-color: white;
+    border-radius: 10px;
+    box-shadow:  0 10px 20px rgba(0, 0, 0, 0.3);
+    border: 1px solid rgba(0, 0, 0, 0.1);
+    margin-bottom: 5%;
+}
+
+.content .cards {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+    grid-gap: 1.5rem;
+    padding: 2rem;
+}
+
+.content .cards li:hover {
+    transform: translateY(-10px);
+}
+
+.content .cards li {
+    background-color: #eef2f8;
+    width: 20rem;
+    height: 10rem;
+    border-radius: 10px;
+    font-size: 30px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.3s ease-in;
+}
+
+.content .cards li p {
+    font-size: 25px;
+}
+
+.content .cards li p, h3 {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}

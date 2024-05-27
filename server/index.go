@@ -8,13 +8,8 @@ import (
 	"time"
 )
 
-type AmountResponse struct {
-	Category   string  `json:"category"`
-	TotalValue float64 `json:"total_amount"`
-}
-
 func (s *Server) handleIndexPage(w http.ResponseWriter, r *http.Request) {
-	userId := 2
+	userId := 1
 
 	balance, err := s.client.GetUserBalance(userId)
 	if err != nil {

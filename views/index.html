@@ -69,7 +69,9 @@
     <div class="container">
         <h1>Welcome to PocketPlan</h1>
         <h4>Your Personalized Budgeting Partner</h4>
-        <button>Login</button>
+        <form action="/oauth2/auth" method="GET">
+          <button type="submit">Login</button>
+        </form>
     </div>
     {{ end }}
     <script src="/public/js/index.js"></script>

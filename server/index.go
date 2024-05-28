@@ -33,7 +33,6 @@ func (s *Server) handleIndexPage(w http.ResponseWriter, r *http.Request) {
 	page := Page{
 		Fields: map[string]string{
 			"CurrentMonth":     now.Month().String(),
-			"Username":         "Lejla",
 			"Balance":          fmt.Sprintf("%.2f", balance.TotalValue),
 			"MonthlyBudget":    fmt.Sprintf("%.2f", budgets["monthly"].Amount),
 			"Expenses":         fmt.Sprintf("%.2f", amount.TotalValue),

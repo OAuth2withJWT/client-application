@@ -8,6 +8,7 @@ import (
 	"github.com/OAuth2withJWT/client-application/app/postgres"
 	"github.com/OAuth2withJWT/client-application/db"
 	"github.com/OAuth2withJWT/client-application/server"
+	"github.com/joho/godotenv"
 )
 
 func main() {
@@ -16,6 +17,11 @@ func main() {
 		log.Fatal("Failed to initialize database: ", err)
 	}
 	defer db.Close()
+
+	err = godotenv.Load()
+	if err != nil {
+		log.Fatalf("Error loading .env file: %v", err)
+	}
 
 	budgetRepository := postgres.NewBudgetRepository(db)
 

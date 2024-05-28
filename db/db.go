@@ -6,16 +6,10 @@ import (
 	"log"
 	"os"
 
-	"github.com/joho/godotenv"
 	_ "github.com/lib/pq"
 )
 
 func Connect() (*sql.DB, error) {
-	err := godotenv.Load(".env")
-	if err != nil {
-		log.Fatalf("Error loading .env file")
-	}
-
 	connStr := fmt.Sprintf("user=%s dbname=%s password=%s sslmode=disable", getEnvVariable("DATABASE_USER"), getEnvVariable("DATABASE_NAME"), getEnvVariable("DATABASE_PASSWORD"))
 
 	db, err := sql.Open("postgres", connStr)

@@ -11,17 +11,18 @@ import (
 	"github.com/joho/godotenv"
 )
 
+func init() {
+	if err := godotenv.Load(); err != nil {
+		log.Fatalf("Error loading .env file: %v", err)
+	}
+}
+
 func main() {
 	db, err := db.Connect()
 	if err != nil {
 		log.Fatal("Failed to initialize database: ", err)
 	}
 	defer db.Close()
-
-	err = godotenv.Load()
-	if err != nil {
-		log.Fatalf("Error loading .env file: %v", err)
-	}
 
 	budgetRepository := postgres.NewBudgetRepository(db)
 

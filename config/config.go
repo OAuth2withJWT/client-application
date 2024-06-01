@@ -8,6 +8,7 @@ type IDPConfig struct {
 	RedirectURI  string
 	AuthURL      string
 	TokenURL     string
+	Scope        string
 }
 
 func LoadIDPConfig() IDPConfig {
@@ -17,5 +18,6 @@ func LoadIDPConfig() IDPConfig {
 		RedirectURI:  "http://localhost:8000/oauth2/callback",
 		AuthURL:      "http://localhost:8080/oauth2/auth",
 		TokenURL:     "http://localhost:8080/oauth2/token",
+		Scope:        "transactions:read,cards:read",
 	}
 }

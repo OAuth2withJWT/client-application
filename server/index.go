@@ -1,7 +1,6 @@
 package server
 
 import (
-	"fmt"
 	"log"
 	"net/http"
 	"text/template"
@@ -30,19 +29,21 @@ func (s *Server) handleIndexPage(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	page := Page{
-		Fields: map[string]string{
-			"CurrentMonth":     now.Month().String(),
-			"Username":         "Lejla",
-			"Balance":          fmt.Sprintf("%.2f", balance.TotalValue),
-			"MonthlyBudget":    fmt.Sprintf("%.2f", budgets["monthly"].Amount),
-			"Expenses":         fmt.Sprintf("%.2f", amount.TotalValue),
-			"HealthcareBudget": fmt.Sprintf("%.2f", budgets["healthcare"].Amount),
-		},
-	}
+	/*
+		page := Page{
+			Fields: map[string]string{
+				"CurrentMonth":     now.Month().String(),
+				"Username":         "Lejla",
+				"Balance":          fmt.Sprintf("%.2f", balance.TotalValue),
+				"MonthlyBudget":    fmt.Sprintf("%.2f", budgets["monthly"].Amount),
+				"Expenses":         fmt.Sprintf("%.2f", amount.TotalValue),
+				"HealthcareBudget": fmt.Sprintf("%.2f", budgets["healthcare"].Amount),
+			},
+		}
+	*/
 
 	tmpl, _ := template.ParseFiles("views/index.html")
-	err = tmpl.Execute(w, page)
+	err = tmpl.Execute(w, nil)
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return

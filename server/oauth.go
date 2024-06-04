@@ -1,0 +1,86 @@
+package server
+
+import (
+	"bytes"
+	"encoding/json"
+	"fmt"
+	"io"
+	"net/http"
+)
+
+type TokenRequest struct {
+	GrantType    string `json:"grant_type"`
+	Code         string `json:"code"`
+	ClientID     string `json:"client_id"`
+	ClientSecret string `json:"client_secret"`
+	RedirectURI  string `json:"redirect_uri"`
+}
+
+type TokenResponse struct {
+	AccessToken string `json:"access_token"`
+	TokenType   string `json:"token_type"`
+	ExpiresIn   string `json:"expires_in"`
+}
+
+func (s *Server) handleAuth(w http.ResponseWriter, r *http.Request) {
+	state, err := generateRandomState()
+	if err != nil {
+		http.Error(w, "Error generating state", http.StatusInternalServerError)
+		return
+	}
+	setStateCookie(w, state)
+
+	http.Redirect(w, r, fmt.Sprintf("%s?response_type=code&client_id=%s&redirect_uri=%s&state=%s", s.IDPConfig.AuthURL, s.IDPConfig.ClientID, s.IDPConfig.RedirectURI, state), http.StatusFound)
+}
+
+func (s *Server) handleCallback(w http.ResponseWriter, r *http.Request) {
+	code := r.URL.Query().Get("code")
+	state := r.URL.Query().Get("state")
+
+	if state == "" || code == "" {
+		http.Error(w, "Missing state or code in the callback", http.StatusBadRequest)
+		return
+	}
+
+	if !verifyState(w, r, state) {
+		http.Error(w, "Invalid state parameter", http.StatusForbidden)
+		return
+	}
+
+	tokenReq := TokenRequest{
+		GrantType:    "authorization_code",
+		Code:         code,
+		ClientID:     s.IDPConfig.ClientID,
+		ClientSecret: s.IDPConfig.ClientSecret,
+		RedirectURI:  s.IDPConfig.RedirectURI,
+	}
+
+	var reqBody bytes.Buffer
+	if err := json.NewEncoder(&reqBody).Encode(tokenReq); err != nil {
+		http.Error(w, "Failed to encode token request", http.StatusInternalServerError)
+		return
+	}
+
+	resp, err := http.Post(s.IDPConfig.TokenURL, "application/json", &reqBody)
+	if err != nil {
+		http.Error(w, "Failed to make token request", http.StatusInternalServerError)
+		return
+	}
+	defer resp.Body.Close()
+
+	if resp.StatusCode != http.StatusOK {
+		bodyBytes, _ := io.ReadAll(resp.Body)
+		http.Error(w, fmt.Sprintf("Token request failed: %s", string(bodyBytes)), http.StatusInternalServerError)
+		return
+	}
+
+	var tokenResp TokenResponse
+	if err := json.NewDecoder(resp.Body).Decode(&tokenResp); err != nil {
+		http.Error(w, "Failed to decode token response", http.StatusInternalServerError)
+		return
+	}
+
+	w.Header().Set("Content-Type", "application/json")
+	json.NewEncoder(w).Encode(tokenResp)
+
+}

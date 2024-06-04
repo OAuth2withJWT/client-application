@@ -3,7 +3,6 @@ package server
 import (
 	"crypto/rand"
 	"encoding/base64"
-	"log"
 	"net/http"
 )
 
@@ -14,14 +13,11 @@ func generateRandomState() (string, error) {
 		return "", err
 	}
 	state := base64.URLEncoding.EncodeToString(b)
-	log.Printf("Generated State: '%s'", state)
 	return state, nil
 }
 
-func verifyState(r *http.Request, state string) bool {
-	cookieState := getStateFromCookie(r)
-	log.Print(cookieState)
-	log.Print(state)
+func verifyState(w http.ResponseWriter, r *http.Request, state string) bool {
+	cookieState := getStateFromCookie(w, r)
 	if cookieState == "" || state == "" {
 		return false
 	}

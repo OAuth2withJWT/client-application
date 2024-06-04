@@ -25,7 +25,7 @@ func (s *Server) handleCallback(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	if !verifyState(r, state) {
+	if !verifyState(w, r, state) {
 		http.Error(w, "Invalid state parameter", http.StatusForbidden)
 		return
 	}

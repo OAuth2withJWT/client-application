@@ -33,4 +33,5 @@ func (s *Server) Run() error {
 func (s *Server) setupRoutes() {
 	s.router.PathPrefix("/public/").Handler(http.StripPrefix("/public/", http.FileServer(http.Dir("public"))))
 	s.router.HandleFunc("/", s.handleIndexPage).Methods("GET")
+	s.router.HandleFunc("/transactions", s.handleTransactionsPage).Methods("GET")
 }

@@ -7,7 +7,7 @@ import (
 
 func (s *Server) handleIndexPage(w http.ResponseWriter, r *http.Request) {
 	/*
-			userId := 1
+		userId := 1
 
 		balance, err := s.client.GetUserBalance(userId)
 		if err != nil {
@@ -41,19 +41,28 @@ func (s *Server) handleIndexPage(w http.ResponseWriter, r *http.Request) {
 			}
 	*/
 
-	tmpl, _ := template.ParseFiles("views/index.html")
-	err := tmpl.Execute(w, nil)
+	tmpl, err := template.ParseFiles("views/menu.html", "views/index.html")
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
 	}
+
+	if err := tmpl.ExecuteTemplate(w, "index.html", nil); err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+
 }
 
 func (s *Server) handleTransactionsPage(w http.ResponseWriter, r *http.Request) {
 
-	tmpl, _ := template.ParseFiles("views/transactions.html")
-	err := tmpl.Execute(w, nil)
+	tmpl, err := template.ParseFiles("views/menu.html", "views/transactions.html")
 	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+
+	if err := tmpl.ExecuteTemplate(w, "transactions.html", nil); err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
 	}

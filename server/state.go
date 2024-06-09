@@ -6,8 +6,12 @@ import (
 	"net/http"
 )
 
+const (
+	stateLength = 32
+)
+
 func generateRandomState() (string, error) {
-	b := make([]byte, 32)
+	b := make([]byte, stateLength)
 	_, err := rand.Read(b)
 	if err != nil {
 		return "", err

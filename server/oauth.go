@@ -14,6 +14,7 @@ type TokenRequest struct {
 	ClientID     string `json:"client_id"`
 	ClientSecret string `json:"client_secret"`
 	RedirectURI  string `json:"redirect_uri"`
+	CodeVerifier string `json:"code_verifier"`
 }
 
 type TokenResponse struct {
@@ -30,7 +31,16 @@ func (s *Server) handleAuth(w http.ResponseWriter, r *http.Request) {
 	}
 	setStateCookie(w, state)
 
-	http.Redirect(w, r, fmt.Sprintf("%s?response_type=code&client_id=%s&redirect_uri=%s&state=%s", s.IDPConfig.AuthURL, s.IDPConfig.ClientID, s.IDPConfig.RedirectURI, state), http.StatusFound)
+	codeVerifier, err := generateCodeVerifier()
+	if err != nil {
+		http.Error(w, "Error generating code verifier", http.StatusInternalServerError)
+		return
+	}
+	codeChallenge := generateCodeChallenge(codeVerifier)
+
+	setCodeVerifierCookie(w, codeVerifier)
+
+	http.Redirect(w, r, fmt.Sprintf("%s?response_type=code&client_id=%s&redirect_uri=%s&state=%s&code_challenge=%s&code_challenge_method=S256", s.IDPConfig.AuthURL, s.IDPConfig.ClientID, s.IDPConfig.RedirectURI, state, codeChallenge), http.StatusFound)
 }
 
 func (s *Server) handleCallback(w http.ResponseWriter, r *http.Request) {
@@ -47,12 +57,21 @@ func (s *Server) handleCallback(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
+	codeVerifier, err := getCodeVerifierFromCookie(r)
+	if err != nil {
+		http.Error(w, "Failed to get code verifier", http.StatusInternalServerError)
+		return
+	}
+
+	deleteCodeVerifierCookie(w)
+
 	tokenReq := TokenRequest{
 		GrantType:    "authorization_code",
 		Code:         code,
 		ClientID:     s.IDPConfig.ClientID,
 		ClientSecret: s.IDPConfig.ClientSecret,
 		RedirectURI:  s.IDPConfig.RedirectURI,
+		CodeVerifier: codeVerifier,
 	}
 
 	var reqBody bytes.Buffer

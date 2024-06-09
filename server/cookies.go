@@ -7,6 +7,7 @@ import (
 	"errors"
 	"net/http"
 	"os"
+	"time"
 )
 
 var secretKey []byte
@@ -29,7 +30,6 @@ func setStateCookie(w http.ResponseWriter, state string) {
 		http.Error(w, "server error", http.StatusInternalServerError)
 		return
 	}
-
 }
 
 func getStateFromCookie(w http.ResponseWriter, r *http.Request) string {
@@ -112,4 +112,40 @@ func read(r *http.Request, name string) (string, error) {
 	}
 
 	return string(value), nil
+}
+
+func setCodeVerifierCookie(w http.ResponseWriter, codeVerifier string) {
+	encodedVerifier := base64.RawURLEncoding.EncodeToString([]byte(codeVerifier))
+	http.SetCookie(w, &http.Cookie{
+		Name:     "code_verifier",
+		Value:    encodedVerifier,
+		Path:     "/",
+		HttpOnly: true,
+		Secure:   true,
+		SameSite: http.SameSiteStrictMode,
+	})
+}
+
+func getCodeVerifierFromCookie(r *http.Request) (string, error) {
+	cookie, err := r.Cookie("code_verifier")
+	if err != nil {
+		return "", err
+	}
+	decodedVerifier, err := base64.RawURLEncoding.DecodeString(cookie.Value)
+	if err != nil {
+		return "", err
+	}
+
+	return string(decodedVerifier), nil
+}
+func deleteCodeVerifierCookie(w http.ResponseWriter) {
+	http.SetCookie(w, &http.Cookie{
+		Name:     "code_verifier",
+		Value:    "",
+		Expires:  time.Now().AddDate(0, 0, -1),
+		Path:     "/",
+		Secure:   true,
+		HttpOnly: true,
+		SameSite: http.SameSiteStrictMode,
+	})
 }

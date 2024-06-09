@@ -27,11 +27,12 @@ func New(a *app.Application, c *api.Client) *Server {
 
 func (s *Server) Run() error {
 	log.Println("Server started on port 8000")
-	return http.ListenAndServe(":8000", s.router)
+	return http.ListenAndServe(":8020", s.router)
 }
 
 func (s *Server) setupRoutes() {
 	s.router.PathPrefix("/public/").Handler(http.StripPrefix("/public/", http.FileServer(http.Dir("public"))))
 	s.router.HandleFunc("/", s.handleIndexPage).Methods("GET")
 	s.router.HandleFunc("/transactions", s.handleTransactionsPage).Methods("GET")
+	s.router.HandleFunc("/budgets", s.handleBudgetsPage).Methods("GET")
 }

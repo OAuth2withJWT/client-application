@@ -27,7 +27,7 @@ func New(a *app.Application, c *api.Client) *Server {
 
 func (s *Server) Run() error {
 	log.Println("Server started on port 8000")
-	return http.ListenAndServe(":8020", s.router)
+	return http.ListenAndServe(":8000", s.router)
 }
 
 func (s *Server) setupRoutes() {

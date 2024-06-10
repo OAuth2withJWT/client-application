@@ -140,6 +140,7 @@ func getCodeVerifierFromCookie(r *http.Request) (string, error) {
 
 	return string(decodedVerifier), nil
 }
+
 func deleteCodeVerifierCookie(w http.ResponseWriter) {
 	http.SetCookie(w, &http.Cookie{
 		Name:     "code_verifier",
@@ -156,9 +157,19 @@ func setAccessCookie(w http.ResponseWriter, accessSessionID string) {
 	http.SetCookie(w, &http.Cookie{
 		Name:     "access_session_id",
 		Value:    accessSessionID,
+		Path:     "/",
 		Expires:  time.Now().Add(app.SessionDurationInHours * time.Hour),
 		Secure:   true,
 		HttpOnly: true,
 		SameSite: http.SameSiteStrictMode,
 	})
+}
+
+func getAccessSessionIDFromCookie(r *http.Request) string {
+	cookie, err := r.Cookie("access_session_id")
+	if err != nil {
+		return ""
+	}
+	sessionID := cookie.Value
+	return sessionID
 }

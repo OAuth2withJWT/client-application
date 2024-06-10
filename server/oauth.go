@@ -5,7 +5,6 @@ import (
 	"encoding/json"
 	"fmt"
 	"io"
-	"log"
 	"net/http"
 	"time"
 
@@ -112,7 +111,5 @@ func (s *Server) handleCallback(w http.ResponseWriter, r *http.Request) {
 	}
 
 	setAccessCookie(w, sessionID)
-
-	log.Printf(tokenResp.AccessToken)
 	http.Redirect(w, r, "/", http.StatusFound)
 }

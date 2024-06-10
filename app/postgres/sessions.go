@@ -36,7 +36,7 @@ func (sr *SessionRepository) UpdateStatus(sessionID string) error {
 
 func (sr *SessionRepository) GetSessionByID(sessionID string) (app.Session, error) {
 	var session app.Session
-	err := sr.db.QueryRow("SELECT id, session_id, user_id, access_token, expires_at FROM sessions WHERE session_id = $1", sessionID).Scan(&session.Id, &session.SessionId, &session.UserId, &session.ExpiresAt)
+	err := sr.db.QueryRow("SELECT id, session_id, user_id, access_token, expires_at FROM sessions WHERE session_id = $1", sessionID).Scan(&session.Id, &session.SessionId, &session.UserId, &session.AccessToken, &session.ExpiresAt)
 	if err != nil {
 		return app.Session{}, err
 	}

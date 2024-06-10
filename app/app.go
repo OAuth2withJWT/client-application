@@ -1,5 +1,6 @@
 package app
 
 type Application struct {
-	BudgetService *BudgetService
+	BudgetService  *BudgetService
+	SessionService *SessionService
 }

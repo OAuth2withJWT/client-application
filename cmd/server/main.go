@@ -25,9 +25,11 @@ func main() {
 	defer db.Close()
 
 	budgetRepository := postgres.NewBudgetRepository(db)
+	sessionRepository := postgres.NewSessionRepository(db)
 
 	app := app.Application{
-		BudgetService: app.NewBudgetService(budgetRepository),
+		BudgetService:  app.NewBudgetService(budgetRepository),
+		SessionService: app.NewSessionService(sessionRepository),
 	}
 
 	api := api.Client{}

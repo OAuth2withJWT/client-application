@@ -8,6 +8,8 @@ import (
 	"net/http"
 	"os"
 	"time"
+
+	"github.com/OAuth2withJWT/client-application/app"
 )
 
 var secretKey []byte
@@ -144,6 +146,17 @@ func deleteCodeVerifierCookie(w http.ResponseWriter) {
 		Value:    "",
 		Expires:  time.Now().AddDate(0, 0, -1),
 		Path:     "/",
+		Secure:   true,
+		HttpOnly: true,
+		SameSite: http.SameSiteStrictMode,
+	})
+}
+
+func setAccessCookie(w http.ResponseWriter, accessSessionID string) {
+	http.SetCookie(w, &http.Cookie{
+		Name:     "access_session_id",
+		Value:    accessSessionID,
+		Expires:  time.Now().Add(app.SessionDurationInHours * time.Hour),
 		Secure:   true,
 		HttpOnly: true,
 		SameSite: http.SameSiteStrictMode,

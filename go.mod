@@ -1,6 +1,12 @@
 module github.com/OAuth2withJWT/client-application
 
 require (
+	github.com/gorilla/sessions v1.2.2
+	github.com/joho/godotenv v1.5.1
+	github.com/lib/pq v1.10.9
+)
+
+require (
 	dario.cat/mergo v1.0.0 // indirect
 	github.com/bep/godartsass v1.2.0 // indirect
 	github.com/bep/godartsass/v2 v2.0.0 // indirect
@@ -13,8 +19,7 @@ require (
 	github.com/gobwas/glob v0.2.3 // indirect
 	github.com/gohugoio/hugo v0.123.3 // indirect
 	github.com/gorilla/mux v1.8.1 // indirect
-	github.com/joho/godotenv v1.5.1
-	github.com/lib/pq v1.10.9
+	github.com/gorilla/securecookie v1.1.2 // indirect
 	github.com/mattn/go-colorable v0.1.13 // indirect
 	github.com/mattn/go-isatty v0.0.20 // indirect
 	github.com/mitchellh/hashstructure v1.1.0 // indirect

@@ -5,7 +5,11 @@ import (
 	"encoding/json"
 	"fmt"
 	"io"
+	"log"
 	"net/http"
+	"time"
+
+	"github.com/OAuth2withJWT/client-application/app"
 )
 
 type TokenRequest struct {
@@ -22,6 +26,8 @@ type TokenResponse struct {
 	TokenType   string `json:"token_type"`
 	ExpiresIn   string `json:"expires_in"`
 }
+
+var userId = 1
 
 func (s *Server) handleAuth(w http.ResponseWriter, r *http.Request) {
 	state, err := generateRandomState()
@@ -99,7 +105,14 @@ func (s *Server) handleCallback(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	w.Header().Set("Content-Type", "application/json")
-	json.NewEncoder(w).Encode(tokenResp)
+	sessionID, err := s.app.SessionService.CreateSession(userId, tokenResp.AccessToken, time.Now().Add(app.SessionDurationInHours*time.Hour))
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
 
+	setAccessCookie(w, sessionID)
+
+	log.Printf(tokenResp.AccessToken)
+	http.Redirect(w, r, "/", http.StatusFound)
 }

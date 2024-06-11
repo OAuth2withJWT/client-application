@@ -11,4 +11,4 @@ directories = ["."]
   args = []
 
 [build.watch]
-  extensions = ["go", "html", "css", "sql"]
+  extensions = ["go", "html", "css", "sql", "js"]

@@ -9,13 +9,17 @@ import (
 )
 
 func (s *Server) handleIndexPage(w http.ResponseWriter, r *http.Request) {
-	userId := 1
 	page := Page{}
 
-	sessionID := getAccessSessionIDFromCookie(r)
+	sessionID := getAuthSessionIDFromCookie(r)
 	session, err := s.app.SessionService.ValidateSession(sessionID)
-	if err == nil {
+	if err != nil {
+		deleteAuthSessionCookie(w)
+	} else {
 		accessToken := session.AccessToken
+		user, _ := s.GetUserInfoFromIDToken(session.IdToken)
+		userId := user.ID
+
 		balance, err := s.client.GetUserBalance(userId, accessToken)
 		if err != nil {
 			log.Print(err.Error())
@@ -42,7 +46,7 @@ func (s *Server) handleIndexPage(w http.ResponseWriter, r *http.Request) {
 				"MonthlyBudget":    fmt.Sprintf("%.2f", budgets["monthly"].Amount),
 				"Expenses":         fmt.Sprintf("%.2f", amount.TotalValue),
 				"HealthcareBudget": fmt.Sprintf("%.2f", budgets["healthcare"].Amount),
-				"Username":         "user",
+				"Username":         user.Name,
 			},
 		}
 	}

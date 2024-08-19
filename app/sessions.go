@@ -10,10 +10,17 @@ const SessionDurationInHours = 24
 
 type Session struct {
 	Id          int
-	UserId      int
 	SessionId   string
 	AccessToken string
+	IdToken     string
 	ExpiresAt   time.Time
+}
+
+type TokenResponse struct {
+	AccessToken string `json:"access_token"`
+	IDToken     string `json:"id_token"`
+	TokenType   string `json:"token_type"`
+	ExpiresIn   string `json:"expires_in"`
 }
 
 type SessionService struct {
@@ -27,9 +34,10 @@ func NewSessionService(sr SessionRepository) *SessionService {
 }
 
 type SessionRepository interface {
-	CreateSession(sessionID string, userID int, accessToken string, expiresAt time.Time) (string, error)
+	CreateSession(sessionID string, accessToken string, idToken string, expiresAt time.Time) (string, error)
 	GetSessionByID(sessionID string) (Session, error)
 	UpdateStatus(sessionID string) error
+	DeleteSession(sessionID string) error
 }
 
 func (s *SessionService) UpdateStatus(sessionID string) error {
@@ -45,7 +53,8 @@ func (s *SessionService) ValidateSession(sessionID string) (Session, error) {
 	if err != nil {
 		return Session{}, err
 	}
-	if session.SessionId == "" || session.ExpiresAt.Before(time.Now()) {
+	if session.ExpiresAt.Before(time.Now()) {
+		s.repository.DeleteSession(sessionID)
 		return Session{}, err
 	}
 	return session, nil
@@ -60,12 +69,12 @@ func (s *SessionService) generateSessionID() (string, error) {
 	return base64.URLEncoding.EncodeToString(randomBytes), nil
 }
 
-func (s *SessionService) CreateSession(userID int, accessToken string, expiresAt time.Time) (string, error) {
+func (s *SessionService) CreateSession(accessToken string, idToken string, expiresAt time.Time) (string, error) {
 	sessionID, err := s.generateSessionID()
 	if err != nil {
 		return "", err
 	}
-	sessionID, err = s.repository.CreateSession(sessionID, userID, accessToken, expiresAt)
+	sessionID, err = s.repository.CreateSession(sessionID, accessToken, idToken, expiresAt)
 	if err != nil {
 		return "", err
 	}

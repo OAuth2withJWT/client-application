@@ -153,9 +153,9 @@ func deleteCodeVerifierCookie(w http.ResponseWriter) {
 	})
 }
 
-func setAccessCookie(w http.ResponseWriter, accessSessionID string) {
+func setAuthSessionCookie(w http.ResponseWriter, accessSessionID string) {
 	http.SetCookie(w, &http.Cookie{
-		Name:     "access_session_id",
+		Name:     "auth_session_id",
 		Value:    accessSessionID,
 		Path:     "/",
 		Expires:  time.Now().Add(app.SessionDurationInHours * time.Hour),
@@ -165,8 +165,20 @@ func setAccessCookie(w http.ResponseWriter, accessSessionID string) {
 	})
 }
 
-func getAccessSessionIDFromCookie(r *http.Request) string {
-	cookie, err := r.Cookie("access_session_id")
+func deleteAuthSessionCookie(w http.ResponseWriter) {
+	http.SetCookie(w, &http.Cookie{
+		Name:     "auth_session_id",
+		Value:    "",
+		Expires:  time.Now().AddDate(0, 0, -1),
+		Path:     "/",
+		Secure:   true,
+		HttpOnly: true,
+		SameSite: http.SameSiteStrictMode,
+	})
+}
+
+func getAuthSessionIDFromCookie(r *http.Request) string {
+	cookie, err := r.Cookie("auth_session_id")
 	if err != nil {
 		return ""
 	}

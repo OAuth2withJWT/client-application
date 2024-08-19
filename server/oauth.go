@@ -22,11 +22,10 @@ type TokenRequest struct {
 
 type TokenResponse struct {
 	AccessToken string `json:"access_token"`
+	IDToken     string `json:"id_token"`
 	TokenType   string `json:"token_type"`
 	ExpiresIn   string `json:"expires_in"`
 }
-
-var userId = 1
 
 func (s *Server) handleAuth(w http.ResponseWriter, r *http.Request) {
 	state, err := generateRandomState()
@@ -70,6 +69,29 @@ func (s *Server) handleCallback(w http.ResponseWriter, r *http.Request) {
 
 	deleteCodeVerifierCookie(w)
 
+	tokenResp, err := s.requestToken(code, codeVerifier)
+	if err != nil {
+		http.Error(w, fmt.Sprintf("Token request failed: %s", err.Error()), http.StatusInternalServerError)
+		return
+	}
+
+	err = s.ValidateIDToken(tokenResp.IDToken, tokenResp.AccessToken)
+	if err != nil {
+		http.Error(w, fmt.Sprintf("ID token validation failed: %s", err.Error()), http.StatusInternalServerError)
+		return
+	}
+
+	sessionID, err := s.app.SessionService.CreateSession(tokenResp.AccessToken, tokenResp.IDToken, time.Now().Add(app.SessionDurationInHours*time.Hour))
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+
+	setAuthSessionCookie(w, sessionID)
+	http.Redirect(w, r, "/", http.StatusFound)
+}
+
+func (s *Server) requestToken(code, codeVerifier string) (*TokenResponse, error) {
 	tokenReq := TokenRequest{
 		GrantType:    "authorization_code",
 		Code:         code,
@@ -81,35 +103,24 @@ func (s *Server) handleCallback(w http.ResponseWriter, r *http.Request) {
 
 	var reqBody bytes.Buffer
 	if err := json.NewEncoder(&reqBody).Encode(tokenReq); err != nil {
-		http.Error(w, "Failed to encode token request", http.StatusInternalServerError)
-		return
+		return nil, fmt.Errorf("failed to encode token request: %w", err)
 	}
 
 	resp, err := http.Post(s.IDPConfig.TokenURL, "application/json", &reqBody)
 	if err != nil {
-		http.Error(w, "Failed to make token request", http.StatusInternalServerError)
-		return
+		return nil, fmt.Errorf("failed to make token request: %w", err)
 	}
 	defer resp.Body.Close()
 
 	if resp.StatusCode != http.StatusOK {
 		bodyBytes, _ := io.ReadAll(resp.Body)
-		http.Error(w, fmt.Sprintf("Token request failed: %s", string(bodyBytes)), http.StatusInternalServerError)
-		return
+		return nil, fmt.Errorf("token request failed: %s", string(bodyBytes))
 	}
 
 	var tokenResp TokenResponse
 	if err := json.NewDecoder(resp.Body).Decode(&tokenResp); err != nil {
-		http.Error(w, "Failed to decode token response", http.StatusInternalServerError)
-		return
+		return nil, fmt.Errorf("failed to decode token response: %w", err)
 	}
 
-	sessionID, err := s.app.SessionService.CreateSession(userId, tokenResp.AccessToken, time.Now().Add(app.SessionDurationInHours*time.Hour))
-	if err != nil {
-		http.Error(w, err.Error(), http.StatusInternalServerError)
-		return
-	}
-
-	setAccessCookie(w, sessionID)
-	http.Redirect(w, r, "/", http.StatusFound)
+	return &tokenResp, nil
 }

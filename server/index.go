@@ -13,6 +13,7 @@ func (s *Server) handleIndexPage(w http.ResponseWriter, r *http.Request) {
 
 	sessionID := getAuthSessionIDFromCookie(r)
 	session, err := s.app.SessionService.ValidateSession(sessionID)
+
 	if err != nil {
 		deleteAuthSessionCookie(w)
 	} else {
@@ -26,6 +27,7 @@ func (s *Server) handleIndexPage(w http.ResponseWriter, r *http.Request) {
 		}
 
 		now := time.Now()
+
 		beginningOfMonth := time.Date(now.Year(), now.Month(), 1, 0, 0, 0, 0, now.Location()).Format("2006-01-02")
 
 		amount, err := s.client.GetUserCurrentExpensesByDateAndTime(userId, accessToken, beginningOfMonth, "")

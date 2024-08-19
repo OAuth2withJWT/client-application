@@ -81,7 +81,7 @@ func (s *Server) handleCallback(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	sessionID, err := s.app.SessionService.CreateSession(tokenResp.AccessToken, tokenResp.IDToken, time.Now().Add(app.SessionDurationInHours*time.Hour))
+	sessionID, err := s.app.SessionService.CreateSession(tokenResp.AccessToken, tokenResp.IDToken, time.Now().Add(app.SessionDurationInHours))
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return

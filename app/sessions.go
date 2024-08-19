@@ -6,7 +6,7 @@ import (
 	"time"
 )
 
-const SessionDurationInHours = 24
+const SessionDurationInHours = 1 * time.Minute
 
 type Session struct {
 	Id          int
@@ -45,27 +45,35 @@ func (s *SessionService) UpdateStatus(sessionID string) error {
 	if err != nil {
 		return err
 	}
+
 	return nil
 }
 
 func (s *SessionService) ValidateSession(sessionID string) (Session, error) {
 	session, err := s.GetSessionByID(sessionID)
-	if err != nil {
+	if err != nil || session.SessionId == "" {
 		return Session{}, err
 	}
-	if session.ExpiresAt.Before(time.Now()) {
+
+	nowUnix := time.Now().Unix()
+	expiresAtUnix := session.ExpiresAt.Add(-2 * time.Hour).Unix()
+
+	if expiresAtUnix <= nowUnix {
 		s.repository.DeleteSession(sessionID)
 		return Session{}, err
 	}
+
 	return session, nil
 }
 
 func (s *SessionService) generateSessionID() (string, error) {
 	randomBytes := make([]byte, 32)
 	_, err := rand.Read(randomBytes)
+
 	if err != nil {
 		return "", err
 	}
+
 	return base64.URLEncoding.EncodeToString(randomBytes), nil
 }
 
@@ -74,10 +82,12 @@ func (s *SessionService) CreateSession(accessToken string, idToken string, expir
 	if err != nil {
 		return "", err
 	}
+
 	sessionID, err = s.repository.CreateSession(sessionID, accessToken, idToken, expiresAt)
 	if err != nil {
 		return "", err
 	}
+
 	return sessionID, nil
 }
 
@@ -86,5 +96,6 @@ func (s *SessionService) GetSessionByID(sessionID string) (Session, error) {
 	if err != nil {
 		return Session{}, err
 	}
+
 	return session, nil
 }

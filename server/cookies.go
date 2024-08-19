@@ -8,8 +8,6 @@ import (
 	"net/http"
 	"os"
 	"time"
-
-	"github.com/OAuth2withJWT/client-application/app"
 )
 
 var secretKey []byte
@@ -158,7 +156,6 @@ func setAuthSessionCookie(w http.ResponseWriter, accessSessionID string) {
 		Name:     "auth_session_id",
 		Value:    accessSessionID,
 		Path:     "/",
-		Expires:  time.Now().Add(app.SessionDurationInHours * time.Hour),
 		Secure:   true,
 		HttpOnly: true,
 		SameSite: http.SameSiteStrictMode,

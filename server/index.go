@@ -6,6 +6,8 @@ import (
 	"net/http"
 	"text/template"
 	"time"
+
+	"github.com/OAuth2withJWT/client-application/app"
 )
 
 func (s *Server) handleIndexPage(w http.ResponseWriter, r *http.Request) {
@@ -14,7 +16,7 @@ func (s *Server) handleIndexPage(w http.ResponseWriter, r *http.Request) {
 	sessionID := getAuthSessionIDFromCookie(r)
 	session, err := s.app.SessionService.ValidateSession(sessionID)
 
-	if err != nil {
+	if (err != nil || session == app.Session{}) {
 		deleteAuthSessionCookie(w)
 	} else {
 		accessToken := session.AccessToken

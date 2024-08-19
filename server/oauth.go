@@ -7,8 +7,6 @@ import (
 	"io"
 	"net/http"
 	"time"
-
-	"github.com/OAuth2withJWT/client-application/app"
 )
 
 type TokenRequest struct {
@@ -81,7 +79,7 @@ func (s *Server) handleCallback(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	sessionID, err := s.app.SessionService.CreateSession(tokenResp.AccessToken, tokenResp.IDToken, time.Now().Add(app.SessionDurationInHours))
+	sessionID, err := s.app.SessionService.CreateSession(tokenResp.AccessToken, tokenResp.IDToken, time.Now().Add(s.IDPConfig.SessionDurationInHours))
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return

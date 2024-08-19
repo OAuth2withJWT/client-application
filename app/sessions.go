@@ -6,8 +6,6 @@ import (
 	"time"
 )
 
-const SessionDurationInHours = 1 * time.Minute
-
 type Session struct {
 	Id          int
 	SessionId   string

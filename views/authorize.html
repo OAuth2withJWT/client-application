@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PocketPlan - Your Personal Finance Companion</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.7/dist/tailwind.min.css" rel="stylesheet">
+    <style>
+        .fade-in {
+            animation: fadeIn 1s ease-in-out;
+        }
+
+        @keyframes fadeIn {
+            0% {
+                opacity: 0;
+                transform: translateY(10px);
+            }
+
+            100% {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .scale-in {
+            animation: scaleIn 0.8s ease-out;
+        }
+
+        @keyframes scaleIn {
+            0% {
+                transform: scale(0.8);
+            }
+
+            100% {
+                transform: scale(1);
+            }
+        }
+    </style>
+</head>
+
+<body class="bg-gray-100 font-sans leading-normal tracking-normal">
+
+    <!-- Hero Section -->
+    <header class="bg-gradient-to-r from-blue-500 to-indigo-600 py-20 fade-in">
+        <div class="container mx-auto px-4 text-center">
+            <h1 class="text-4xl md:text-6xl text-white font-bold leading-tight">Take Control of Your Money</h1>
+            <p class="text-lg text-white mt-4">PocketPlan is here to simplify your financial life. Sync your accounts
+                securely and manage your money effortlessly.</p>
+        </div>
+    </header>
+
+    <!-- OAuth Authorization Section -->
+    <section id="oauth-section" class="py-16 fade-in">
+        <div class="container mx-auto px-4 text-center">
+            <h2 class="text-3xl md:text-4xl font-bold text-gray-800 mb-4">Authorize Your Card Transactions</h2>
+            <p class="text-lg text-gray-600 mb-4">To provide you with the best experience, PocketPlan needs to securely
+                connect to your bank accounts.</p>
+            <p class="text-lg text-gray-600 mb-4">Authorizing your card transactions allows us to offer real-time access
+                to your financial data using industry-standard OAuth2 protocol.</p>
+            <div class="mt-10">
+                <a href="#"
+                    class="bg-blue-500 hover:bg-blue-600 text-white font-semibold py-3 px-8 rounded-full transition duration-300 ease-in-out transform scale-100 hover:scale-110">Authorize
+                    Now</a>
+            </div>
+        </div>
+    </section>
+
+</body>
+
+</html>

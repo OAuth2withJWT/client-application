@@ -43,4 +43,6 @@ func (s *Server) setupRoutes() {
 	s.router.HandleFunc("/", s.handleIndexPage).Methods("GET")
 	s.router.HandleFunc("/oauth2/callback", s.handleCallback).Methods("GET")
 	s.router.HandleFunc("/oauth2/auth", s.handleAuth).Methods("GET")
+	s.router.HandleFunc("/transactions", s.handleTransactionsPage).Methods("GET")
+	s.router.HandleFunc("/budgets", s.handleBudgetsPage).Methods("GET")
 }

@@ -1,0 +1,240 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Budgets</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <style>
+        .scrollbar-hide::-webkit-scrollbar {
+            width: 8px;
+            height: 8px;
+            margin: 5px;
+        }
+
+        .scrollbar-hide::-webkit-scrollbar-track {
+            background: #e3e1e1;
+            padding: 20px;
+        }
+
+        .scrollbar-hide::-webkit-scrollbar-thumb {
+            background: #888;
+            border-radius: 10px;
+        }
+
+        .scrollbar-hide::-webkit-scrollbar-thumb:hover {
+            background: #555;
+        }
+
+        .drawer {
+            position: fixed;
+            top: 0;
+            right: 0;
+            width: 300px;
+            height: 100%;
+            background: white;
+            padding: 20px;
+            transition: transform 0.3s ease;
+            transform: translateX(100%);
+            z-index: 1001;
+        }
+        .drawer.open {
+            transform: translateX(0);
+        }
+        .overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            opacity: 0;
+            transition: opacity 0.3s ease;
+            z-index: 1000; 
+            pointer-events: none; /
+        }
+        .overlay.visible {
+            opacity: 1;
+            pointer-events: auto; 
+        }
+    </style>
+</head>
+<body class="flex flex-col h-full w-full overflow-hidden">
+    <div class="h-screen w-screen flex bg-gray-100">
+        <!-- Container -->
+        {{template "menu.html"}}
+        <section class="flex-grow p-6 overflow-auto">
+            <div class="grid grid-cols-2 md:grid-cols-2 gap-6">
+                <!-- Budget Container -->
+                <div class="bg-white p-4 rounded-lg shadow h-40 relative w-full">
+                    <div class="grid grid-cols-3 gap-4">
+                        <h2 class="text-xl font-semibold">June budget</h2>
+                    </div>
+                    <!-- Budget content goes here -->
+                    <div class="mt-4 grid grid-cols-2 gap-4">
+                        <div class="col items-center justify-between">
+                            <p class="py-2">Budget amount</p>
+                            <p class="text-lg font-semibold text-black-400">$700.00</p>
+                        </div>
+                        <div class="col items-center justify-between">
+                            <p class="py-2">Budget amount remaining</p>
+                            <p class="text-lg font-semibold text-green-500">$300.00</p>
+                        </div>
+                    </div>
+                </div>
+                <!-- Balance Container -->
+                <div class="bg-white p-4 rounded-lg shadow h-40 relative w-full">
+                    <h2 class="text-xl font-semibold">Current balance</h2>
+                    <!-- Balance content goes here -->
+                    <div class="mt-4 grid grid-cols-2 gap-4">
+                        <div class="col items-center justify-between">
+                            <p class="py-2">Total amount</p>
+                            <p class="text-lg font-semibold text-black-400">$23345.33</p>
+                        </div>
+                        <div class="col items-center justify-between">
+                            <p class="py-2">Expenses</p>
+                            <p class="text-lg font-semibold text-red-500">$2005.33</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- Budgets Table -->
+            <div class="overflow-x-auto rounded-lg shadow mt-6 max-h-80  scrollbar-hide">
+                <table class="min-w-full bg-white divide-y divide-gray-200">
+                    <thead class="sticky top-0 bg-white">
+                        <tr>
+                            <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                Category
+                            </th>
+                            <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                Budget amount
+                            </th>
+                            <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                Total amount remaining
+                            </th>
+                            <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                Action
+                            </th>
+                        </tr>
+                    </thead>
+                    <tbody class="bg-white divide-y divide-gray-200 dark:bg-gray-800 dark:divide-gray-700">
+                        <tr class="hover:bg-gray-100 dark:hover:bg-gray-700">
+                            <td class="px-6 py-3 text-sm font-normal text-gray-500 whitespace-nowrap dark:text-gray-400">
+                                <div class="text-base font-semibold text-gray-900 dark:text-white">🛒 Groceries</div>
+                            </td>
+                            <td class="px-6 py-3 text-base font-semibold text-gray-900 dark:text-white">$250.00</td>
+                            <td class="px-6 py-3 text-base font-semibold text-gray-900 dark:text-white">$100.00</td>
+                            <td class="px-6 py-3 space-x-2 whitespace-nowrap">
+                                <button type="button" class="updateProductButton inline-flex items-center px-3 py-2 text-sm font-medium text-center text-white rounded-lg bg-blue-500 hover:bg-blue-600 focus:ring-4 focus:ring-blue-300 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">
+                                    <svg class="w-4 h-4 mr-2" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path d="M17.414 2.586a2 2 0 00-2.828 0L7 10.172V13h2.828l7.586-7.586a2 2 0 000-2.828z"></path><path fill-rule="evenodd" d="M2 6a2 2 0 012-2h4a1 1 0 010 2H4v10h10v-4a1 1 0 112 0v4a2 2 0 01-2 2H4a2 2 0 01-2-2V6z" clip-rule="evenodd"></path></svg>
+                                    Update
+                                </button>
+                            </td>
+                        </tr>
+                        <tr class="hover:bg-gray-100 dark:hover:bg-gray-700">
+                            <td class="px-6 py-3 text-sm font-normal text-gray-500 whitespace-nowrap dark:text-gray-400">
+                                <div class="text-base font-semibold text-gray-900 dark:text-white">⚕️ Healthcare</div>
+                            </td>
+                            <td class="px-6 py-3 text-base font-semibold text-gray-900 dark:text-white">$150.00</td>
+                            <td class="px-6 py-3 text-base font-semibold text-gray-900 dark:text-white">$100.00</td>
+                            <td class="px-6 py-3 space-x-2 whitespace-nowrap">
+                                <button type="button" class="updateProductButton inline-flex items-center px-3 py-2 text-sm font-medium text-center text-white rounded-lg bg-blue-500 hover:bg-blue-600 focus:ring-4 focus:ring-blue-300 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">
+                                    <svg class="w-4 h-4 mr-2" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path d="M17.414 2.586a2 2 0 00-2.828 0L7 10.172V13h2.828l7.586-7.586a2 2 0 000-2.828z"></path><path fill-rule="evenodd" d="M2 6a2 2 0 012-2h4a1 1 0 010 2H4v10h10v-4a1 1 0 112 0v4a2 2 0 01-2 2H4a2 2 0 01-2-2V6z" clip-rule="evenodd"></path></svg>
+                                    Update
+                                </button>
+                            </td>
+                        </tr>
+                        <tr class="hover:bg-gray-100 dark:hover:bg-gray-700">
+                            <td class="px-6 py-3 text-sm font-normal text-gray-500 whitespace-nowrap dark:text-gray-400">
+                                <div class="text-base font-semibold text-gray-900 dark:text-white">🚗 Transport</div>
+                            </td>
+                            <td class="px-6 py-3 text-base font-semibold text-gray-900 dark:text-white">$100.00</td>
+                            <td class="px-6 py-3 text-base font-semibold text-gray-900 dark:text-white">$100.00</td>
+                            <td class="px-6 py-3 space-x-2 whitespace-nowrap">
+                                <button type="button" class="updateProductButton inline-flex items-center px-3 py-2 text-sm font-medium text-center text-white rounded-lg bg-blue-500 hover:bg-blue-600 focus:ring-4 focus:ring-blue-300 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">
+                                    <svg class="w-4 h-4 mr-2" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path d="M17.414 2.586a2 2 0 00-2.828 0L7 10.172V13h2.828l7.586-7.586a2 2 0 000-2.828z"></path><path fill-rule="evenodd" d="M2 6a2 2 0 012-2h4a1 1 0 010 2H4v10h10v-4a1 1 0 112 0v4a2 2 0 01-2 2H4a2 2 0 01-2-2V6z" clip-rule="evenodd"></path></svg>
+                                    Update
+                                </button>
+                            </td>
+                        </tr>
+                        <tr class="hover:bg-gray-100 dark:hover:bg-gray-700">
+                            <td class="px-6 py-3 text-sm font-normal text-gray-500 whitespace-nowrap dark:text-gray-400">
+                                <div class="text-base font-semibold text-gray-900 dark:text-white">👗 Clothing</div>
+                            </td>
+                            <td class="px-6 py-3 text-base font-semibold text-gray-900 dark:text-white">$200.00</td>
+                            <td class="px-6 py-3 text-base font-semibold text-gray-900 dark:text-white">$100.00</td>
+                            <td class="px-6 py-3 space-x-2 whitespace-nowrap">
+                                <button type="button" class="updateProductButton inline-flex items-center px-3 py-2 text-sm font-medium text-center text-white rounded-lg bg-blue-500 hover:bg-blue-600 focus:ring-4 focus:ring-blue-300 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">
+                                    <svg class="w-4 h-4 mr-2" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path d="M17.414 2.586a2 2 0 00-2.828 0L7 10.172V13h2.828l7.586-7.586a2 2 0 000-2.828z"></path><path fill-rule="evenodd" d="M2 6a2 2 0 012-2h4a1 1 0 010 2H4v10h10v-4a1 1 0 112 0v4a2 2 0 01-2 2H4a2 2 0 01-2-2V6z" clip-rule="evenodd"></path></svg>
+                                    Update
+                                </button>
+                            </td>
+                        </tr>
+                        <tr class="hover:bg-gray-100 dark:hover:bg-gray-700">
+                            <td class="px-6 py-3 text-sm font-normal text-gray-500 whitespace-nowrap dark:text-gray-400">
+                                <div class="text-base font-semibold text-gray-900 dark:text-white">🎬 Entertainment</div>
+                            </td>
+                            <td class="px-6 py-3 text-base font-semibold text-gray-900 dark:text-white">$300.00</td>
+                            <td class="px-6 py-3 text-base font-semibold text-gray-900 dark:text-white">$100.00</td>
+                            <td class="px-6 py-3 space-x-2 whitespace-nowrap">
+                                <button type="button" class="updateProductButton inline-flex items-center px-3 py-2 text-sm font-medium text-center text-white rounded-lg bg-blue-500 hover:bg-blue-600 focus:ring-4 focus:ring-blue-300 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">
+                                    <svg class="w-4 h-4 mr-2" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path d="M17.414 2.586a2 2 0 00-2.828 0L7 10.172V13h2.828l7.586-7.586a2 2 0 000-2.828z"></path><path fill-rule="evenodd" d="M2 6a2 2 0 012-2h4a1 1 0 010 2H4v10h10v-4a1 1 0 112 0v4a2 2 0 01-2 2H4a2 2 0 01-2-2V6z" clip-rule="evenodd"></path></svg>
+                                    Update
+                                </button>
+                            </td>
+                        </tr>
+                        <tr class="hover:bg-gray-100 dark:hover:bg-gray-700">
+                            <td class="px-6 py-3 text-sm font-normal text-gray-500 whitespace-nowrap dark:text-gray-400">
+                                <div class="text-base font-semibold text-gray-900 dark:text-white">🍽️ Dining</div>
+                            </td>
+                            <td class="px-6 py-3 text-base font-semibold text-gray-900 dark:text-white">$120.00</td>
+                            <td class="px-6 py-3 text-base font-semibold text-gray-900 dark:text-white">$100.00</td>
+                            <td class="px-6 py-3 space-x-2 whitespace-nowrap">
+                                <button type="button" class="updateProductButton inline-flex items-center px-3 py-2 text-sm font-medium text-center text-white rounded-lg bg-blue-500 hover:bg-blue-600 focus:ring-4 focus:ring-blue-300 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">
+                                    <svg class="w-4 h-4 mr-2" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path d="M17.414 2.586a2 2 0 00-2.828 0L7 10.172V13h2.828l7.586-7.586a2 2 0 000-2.828z"></path><path fill-rule="evenodd" d="M2 6a2 2 0 012-2h4a1 1 0 010 2H4v10h10v-4a1 1 0 112 0v4a2 2 0 01-2 2H4a2 2 0 01-2-2V6z" clip-rule="evenodd"></path></svg>
+                                    Update
+                                </button>
+                            </td>
+                        </tr>
+                        <tr class="hover:bg-gray-100 dark:hover:bg-gray-700">
+                            <td class="px-6 py-3 text-sm font-normal text-gray-500 whitespace-nowrap dark:text-gray-400">
+                                <div class="text-base font-semibold text-gray-900 dark:text-white">💡 Utilities</div>
+                            </td>
+                            <td class="px-6 py-3 text-base font-semibold text-gray-900 dark:text-white">$180.00</td>
+                            <td class="px-6 py-3 text-base font-semibold text-gray-900 dark:text-white">$100.00</td>
+                            <td class="px-6 py-3 space-x-2 whitespace-nowrap">
+                                <button type="button" class="updateProductButton inline-flex items-center px-3 py-2 text-sm font-medium text-center text-white rounded-lg bg-blue-500 hover:bg-blue-600 focus:ring-4 focus:ring-blue-300 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">
+                                    <svg class="w-4 h-4 mr-2" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path d="M17.414 2.586a2 2 0 00-2.828 0L7 10.172V13h2.828l7.586-7.586a2 2 0 000-2.828z"></path><path fill-rule="evenodd" d="M2 6a2 2 0 012-2h4a1 1 0 010 2H4v10h10v-4a1 1 0 112 0v4a2 2 0 01-2 2H4a2 2 0 01-2-2V6z" clip-rule="evenodd"></path></svg>
+                                    Update
+                                </button>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </section>
+    </div>
+
+    <div id="drawer" class="drawer">
+        <h2 class="text-2xl font-semibold mb-4">Update Budget</h2>
+        
+        <div class="mb-4">
+            <span for="category" class="text-sm font-medium text-gray-700">Category</span>
+            <h2 type="text" id="category" name="category" class="mt-1 w-full px-3 py-2 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"></h2>
+        </div>
+        <form id="updateForm">
+            <div class="mb-4">
+                <label for="budgetAmount" class="block text-sm font-medium text-gray-700">Budget Amount</label>
+                <input type="text" id="budgetAmount" name="budgetAmount" class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">
+            </div>
+            <div class="flex justify-end">
+                <button type="submit" class="inline-flex items-center px-4 py-2 text-sm font-medium text-center text-white rounded-lg bg-blue-500 hover:bg-blue-600 focus:ring-4 focus:ring-blue-300 dark:bg-blue-500 dark:hover:bg-blue-600 dark:focus:ring-blue-800">
+                    Save
+                </button>
+            </div>
+        </form>
+    </div>
+    <div id="overlay" class="overlay"></div>
+    <script src="/public/js/budgets.js"></script>
+</body>
+</html>

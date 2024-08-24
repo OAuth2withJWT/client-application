@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Transactions</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+
+    <style>
+        .scrollbar-hide::-webkit-scrollbar {
+            width: 8px;
+            height: 8px;
+        }
+
+        .scrollbar-hide::-webkit-scrollbar-track {
+            background: #f1f1f1;
+        }
+
+        .scrollbar-hide::-webkit-scrollbar-thumb {
+            background: #888;
+            border-radius: 10px;
+        }
+
+        .scrollbar-hide::-webkit-scrollbar-thumb:hover {
+            background: #555;
+        }
+    </style>
+</head>
+
+<body class="flex flex-col h-full w-full overflow-hidden">
+
+    <div class="h-screen w-screen flex bg-gray-100">
+        <!-- Container -->
+
+        {{template "menu.html"}}
+
+        <section class="flex-grow p-5 overflow-auto scrollbar-hide ">
+            <div class="p-3 text-gray-600 dark:text-gray-300 outline-none focus:outline-none w-full md:w-2/3">
+                <div class="relative flex flex-col md:flex-row rounded-l-full w-full space-y-3 md:space-y-0">
+                    <div class="flex items-center h-10 px-6 text-sm">
+                        <span>Show</span>
+                    </div>
+                    <select class="bg-white shadow h-10 px-6 rounded-full text-sm focus:outline-none cursor-pointer max-h-10 overflow-y-hidden">
+                        <option class="font-medium cursor-pointer" value="all">All</option>
+                        <!-- Add other category options here -->
+                    </select>
+                    <div class="flex items-center h-10 px-6 text-sm">
+                        <span>from</span>
+                    </div>
+                    <input 
+                        type="date" 
+                        name="from_date"
+                        class="shadow bg-white h-10 flex px-5 w-full md:w-40 rounded-full text-sm focus:outline-none"
+                        required 
+                        autocapitalize="none" 
+                    />
+                    <div class="flex items-center h-10 px-6 text-sm">
+                        <span>to</span>
+                    </div>
+                    <input 
+                        type="date" 
+                        name="to_date"
+                        class="shadow bg-white h-10 flex px-5 w-full md:w-40 rounded-full text-sm focus:outline-none"
+                        required 
+                        autocapitalize="none" 
+                    />
+                </div>
+            </div>
+            
+            
+            
+            <!-- Transactions Table -->
+            <div class="overflow-x-auto rounded shadow mt-4">
+                <table class="min-w-full bg-white divide-y divide-gray-200">
+                    <thead>
+                        <tr>
+                            <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Category</th>
+                            <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Time</th>
+                            <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Amount</th>
+                            <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Type</th>
+                            <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Location</th>
+                        </tr>
+                    </thead>
+                    <tbody id="transaction-table-body" class="divide-y divide-gray-200">
+                        <!-- Sample Transactions -->
+                        <tr class="bg-gray-50">
+                            <td class="px-6 py-4 whitespace-nowrap">
+                                <span class="inline-block px-3 py-1 bg-pink-200 text-pink-800 rounded-full">Groceries</span>
+                            </td>
+                            <td class="px-6 py-4 whitespace-nowrap">2023-01-01</td>
+                            <td class="px-6 py-4 whitespace-nowrap text-green-500">$5000</td>
+                            <td class="px-6 py-4 whitespace-nowrap text-green-500">Income</td>
+                            <td class="px-6 py-4 whitespace-nowrap">Bingo doo</td>
+                        </tr>
+                        <tr>
+                            <td class="px-6 py-4 whitespace-nowrap">
+                                <span class="inline-block px-3 py-1 bg-blue-200 text-blue-800 rounded-full">Healthcare</span>
+                            </td>
+                            <td class="px-6 py-4 whitespace-nowrap">2023-01-02</td>
+                            <td class="px-6 py-4 whitespace-nowrap text-red-500">-$150</td>
+                            <td class="px-6 py-4 whitespace-nowrap text-red-500">Expense</td>
+                            <td class="px-6 py-4 whitespace-nowrap">Al Hana</td>
+                        </tr>
+                        <!-- Add more transactions as needed -->
+                    </tbody>
+                </table>
+            </div>
+        </section>
+        </main>
+    </div>
+
+</body>
+
+</html>

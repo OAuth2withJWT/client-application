@@ -47,7 +47,7 @@
                     <h2 class="text-xl font-semibold mb-4">Balance</h2>
                     <!-- Balance content goes here -->
                     <div class="text-center mb-6">
-                        <p class="text-4xl font-bold text-black">$1345.67</p>
+                        <p class="text-4xl font-bold text-black">${{ index .Fields "Balance" }}</p>
                     </div>
                     <div class="grid grid-cols-2 gap-4">
                         <div class="flex items-center space-x-2">
@@ -65,7 +65,7 @@
                             </svg>
                             <div class="flex flex-col">
                                 <p class="text-sm">Today's Spending</p>
-                                <p class="text-lg">$75.00</p>
+                                <p class="text-lg">${{ index .Fields "TodaySpending" }}</p>
                             </div>
                         </div>
                     </div>
@@ -132,7 +132,7 @@
                     <div class="mt-4">
                         <div class="flex items-center justify-between">
                             <p class="text-gray-600">Budget remaining</p>
-                            <p class="text-lg font-semibold text-black-400">$2345.33</p>
+                            <p class="text-lg font-semibold text-black-400">${{ index .Fields "MonthlyBudget" }}</p>
                         </div>
                         <div class="w-full h-4 bg-gray-200 rounded mt-2">
                             <div class="h-full w-1/3 bg-blue-400 rounded"></div>
@@ -289,43 +289,43 @@
                         <div class="flex items-center mb-2">
                             <span class="mr-2">🛒</span> <!-- Groceries Icon -->
                             <span class="text-gray-800">Groceries</span> <!-- Category Name -->
-                            <span class="ml-auto font-semibold">$250</span> <!-- Bold Budget Value -->
+                            <span class="ml-auto font-semibold">${{ index .Fields "GroceriesBudget" }}</span> <!-- Bold Budget Value -->
                         </div>
                         <!-- Category 2: Healthcare -->
                         <div class="flex items-center mb-2">
                             <span class="mr-2">⚕️</span> <!-- Healthcare Icon -->
                             <span class="text-gray-800">Healthcare</span> <!-- Category Name -->
-                            <span class="ml-auto font-semibold">$150</span> <!-- Bold Budget Value -->
+                            <span class="ml-auto font-semibold">${{ index .Fields "HealthcareBudget" }}</span> <!-- Bold Budget Value -->
                         </div>
                         <!-- Category 3: Transport -->
                         <div class="flex items-center mb-2">
                             <span class="mr-2">🚗</span> <!-- Transport Icon -->
                             <span class="text-gray-800">Transport</span> <!-- Category Name -->
-                            <span class="ml-auto font-semibold">$100</span> <!-- Bold Budget Value -->
+                            <span class="ml-auto font-semibold">${{ index .Fields "TransportBudget" }}</span> <!-- Bold Budget Value -->
                         </div>
                         <!-- Category 4: Clothing -->
                         <div class="flex items-center mb-2">
                             <span class="mr-2">👗</span> <!-- Clothing Icon -->
                             <span class="text-gray-800">Clothing</span> <!-- Category Name -->
-                            <span class="ml-auto font-semibold">$200</span> <!-- Bold Budget Value -->
+                            <span class="ml-auto font-semibold">${{ index .Fields "ClothingBudget" }}</span> <!-- Bold Budget Value -->
                         </div>
                         <!-- Category 5: Entertainment -->
                         <div class="flex items-center mb-2">
                             <span class="mr-2">🎬</span> <!-- Entertainment Icon -->
                             <span class="text-gray-800">Entertainment</span> <!-- Category Name -->
-                            <span class="ml-auto font-semibold">$300</span> <!-- Bold Budget Value -->
+                            <span class="ml-auto font-semibold">${{ index .Fields "EntertainmentBudget" }}</span> <!-- Bold Budget Value -->
                         </div>
                         <!-- Category 6: Dining -->
                         <div class="flex items-center mb-2">
                             <span class="mr-2">🍽️</span> <!-- Dining Icon -->
                             <span class="text-gray-800">Dining</span> <!-- Category Name -->
-                            <span class="ml-auto font-semibold">$120</span> <!-- Bold Budget Value -->
+                            <span class="ml-auto font-semibold">${{ index .Fields "DiningBudget" }}</span> <!-- Bold Budget Value -->
                         </div>
                         <!-- Category 7: Utilities -->
                         <div class="flex items-center mb-2">
                             <span class="mr-2">💡</span> <!-- Utilities Icon -->
                             <span class="text-gray-800">Utilities</span> <!-- Category Name -->
-                            <span class="ml-auto font-semibold">$180</span> <!-- Bold Budget Value -->
+                            <span class="ml-auto font-semibold">${{ index .Fields "UtilitiesBudget" }}</span> <!-- Bold Budget Value -->
                         </div>
                     </div>
                 </div>

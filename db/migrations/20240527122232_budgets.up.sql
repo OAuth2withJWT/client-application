@@ -2,12 +2,11 @@ CREATE TYPE budget_category AS ENUM (
     'monthly',
     'groceries',
     'healthcare',
-    'rent',
-    'utilities',
-    'savings',
-    'transportation',
     'clothing',
-    'personal_care'
+    'entertainment',
+    'dining',
+    'transport',
+    'utilities'
 );
 
 CREATE TABLE budgets (

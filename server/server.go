@@ -45,4 +45,5 @@ func (s *Server) setupRoutes() {
 	s.router.HandleFunc("/oauth2/auth", s.handleAuth).Methods("GET")
 	s.router.HandleFunc("/transactions", s.handleTransactionsPage).Methods("GET")
 	s.router.HandleFunc("/budgets", s.handleBudgetsPage).Methods("GET")
+	s.router.HandleFunc("/update-budget", s.handleUpdateBudget).Methods("POST")
 }

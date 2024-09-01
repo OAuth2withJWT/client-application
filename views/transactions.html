@@ -41,15 +41,24 @@
                     <div class="flex items-center h-10 px-6 text-sm">
                         <span>Show</span>
                     </div>
-                    <select class="bg-white shadow h-10 px-6 rounded-full text-sm focus:outline-none cursor-pointer max-h-10 overflow-y-hidden">
+                    <select id="category-filter" class="bg-white shadow h-10 px-6 rounded-full text-sm focus:outline-none cursor-pointer max-h-10 overflow-y-hidden">
                         <option class="font-medium cursor-pointer" value="all">All</option>
                         <!-- Add other category options here -->
+                        <option value="transport">Transport</option>
+                        <option value="groceries">Groceries</option>
+                        <option value="healthcare">Healthcare</option>
+                        <option value="clothing">Clothing</option>
+                        <option value="entertainment">Entertainment</option>
+                        <option value="dining">Dining</option>
+                        <option value="utilities">Utilities</option>
+                        <option value="transfer">Transfer</option>
                     </select>
                     <div class="flex items-center h-10 px-6 text-sm">
                         <span>from</span>
                     </div>
                     <input 
                         type="date" 
+                        id="from-date"
                         name="from_date"
                         class="shadow bg-white h-10 flex px-5 w-full md:w-40 rounded-full text-sm focus:outline-none"
                         required 
@@ -60,6 +69,7 @@
                     </div>
                     <input 
                         type="date" 
+                        id="to-date"
                         name="to_date"
                         class="shadow bg-white h-10 flex px-5 w-full md:w-40 rounded-full text-sm focus:outline-none"
                         required 
@@ -68,47 +78,78 @@
                 </div>
             </div>
             
-            
-            
             <!-- Transactions Table -->
-            <div class="overflow-x-auto rounded shadow mt-4">
+            <div class="overflow-x-auto rounded shadow m-2 h-5/6">
                 <table class="min-w-full bg-white divide-y divide-gray-200">
                     <thead>
                         <tr>
                             <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Category</th>
                             <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Time</th>
-                            <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Amount</th>
-                            <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Type</th>
                             <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Location</th>
+                            <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Amount</th>
+                            <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Card ID</th>
                         </tr>
                     </thead>
                     <tbody id="transaction-table-body" class="divide-y divide-gray-200">
-                        <!-- Sample Transactions -->
+                        {{range .Transactions}}
                         <tr class="bg-gray-50">
                             <td class="px-6 py-4 whitespace-nowrap">
-                                <span class="inline-block px-3 py-1 bg-pink-200 text-pink-800 rounded-full">Groceries</span>
+                                <span class="inline-block px-3 py-1 
+                                {{if eq .ExpenseCategory "transport"}}bg-blue-200 text-blue-800 
+                                {{else if eq .ExpenseCategory "groceries"}}bg-yellow-200 text-yellow-800 
+                                {{else if eq .ExpenseCategory "healthcare"}}bg-purple-200 text-purple-800 
+                                {{else if eq .ExpenseCategory "clothing"}}bg-pink-200 text-pink-800 
+                                {{else if eq .ExpenseCategory "entertainment"}}bg-blue-200 text-blue-800 
+                                {{else if eq .ExpenseCategory "dining"}}bg-green-200 text-green-800 
+                                {{else if eq .ExpenseCategory "utilities"}}bg-orange-200 text-orange-800 
+                                {{else if eq .ExpenseCategory "transfer"}}bg-red-200 text-red-800 
+                                {{else}}bg-gray-200 text-gray-800{{end}} rounded-full">
+                                    {{.ExpenseCategory}}
+                                </span>
                             </td>
-                            <td class="px-6 py-4 whitespace-nowrap">2023-01-01</td>
-                            <td class="px-6 py-4 whitespace-nowrap text-green-500">$5000</td>
-                            <td class="px-6 py-4 whitespace-nowrap text-green-500">Income</td>
-                            <td class="px-6 py-4 whitespace-nowrap">Bingo doo</td>
-                        </tr>
-                        <tr>
-                            <td class="px-6 py-4 whitespace-nowrap">
-                                <span class="inline-block px-3 py-1 bg-blue-200 text-blue-800 rounded-full">Healthcare</span>
+                            
+                            <td class="px-6 py-4 whitespace-nowrap time">{{.Time}}</td>
+                            <td class="px-6 py-4 whitespace-nowrap">{{.Location}}</td>
+                            <td class="px-6 py-4 whitespace-nowrap text-lg font-medium {{if eq .TransactionType "expense"}}text-red-500{{else}}text-green-500{{end}}">
+                                {{if eq .TransactionType "expense"}}-{{else}}+{{end}}{{.Amount | printf "%.2f"}}
                             </td>
-                            <td class="px-6 py-4 whitespace-nowrap">2023-01-02</td>
-                            <td class="px-6 py-4 whitespace-nowrap text-red-500">-$150</td>
-                            <td class="px-6 py-4 whitespace-nowrap text-red-500">Expense</td>
-                            <td class="px-6 py-4 whitespace-nowrap">Al Hana</td>
+                            <td class="px-6 py-4 whitespace-nowrap text-gray-600">{{.CardId}}</td>
                         </tr>
-                        <!-- Add more transactions as needed -->
+                        {{end}}
                     </tbody>
                 </table>
             </div>
         </section>
-        </main>
     </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const categoryFilter = document.getElementById('category-filter');
+            const tableBody = document.getElementById('transaction-table-body');
+            const rows = Array.from(tableBody.getElementsByTagName('tr'));
+    
+            function filterTable() {
+                const selectedCategory = categoryFilter.value;
+    
+                rows.forEach(row => {
+                    const categorySpan = row.querySelector('td .inline-block');
+                    const category = categorySpan ? categorySpan.textContent.trim() : '';
+                    const isCategoryMatch = selectedCategory === 'all' || category === selectedCategory;
+    
+                    if (isCategoryMatch) {
+                        row.style.display = '';
+                    } else {
+                        row.style.display = 'none';
+                    }
+                });
+            }
+    
+            categoryFilter.addEventListener('change', filterTable);
+            fromDateInput.addEventListener('change', filterTable);
+            toDateInput.addEventListener('change', filterTable);
+        });
+    </script>
+    
 
 </body>
 

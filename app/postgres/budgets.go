@@ -44,3 +44,8 @@ func (br *BudgetRepository) GetBudgetsByUserIdAndMonth(userId int, date string) 
 
 	return budgets, nil
 }
+
+func (br *BudgetRepository) UpdateBudget(userId int, category string, amount float64) error {
+	_, err := br.db.Exec(`UPDATE budgets SET amount = $3 where user_id = $1 AND category = $2`, userId, category, amount)
+	return err
+}

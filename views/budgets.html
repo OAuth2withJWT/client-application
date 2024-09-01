@@ -67,18 +67,21 @@
             <div class="grid grid-cols-2 md:grid-cols-2 gap-6">
                 <!-- Budget Container -->
                 <div class="bg-white p-4 rounded-lg shadow h-40 relative w-full">
-                    <div class="grid grid-cols-3 gap-4">
-                        <h2 class="text-xl font-semibold">June budget</h2>
+                    <div class="flex justify-between items-center border-b pb-2">
+                        <h2 class="text-xl font-semibold">June Budget</h2>
+                        <button id="updateMonthlyBudget" class="text-blue-500 hover:text-blue-600">
+                            <svg class="w-6 h-6 mr-2" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path d="M17.414 2.586a2 2 0 00-2.828 0L7 10.172V13h2.828l7.586-7.586a2 2 0 000-2.828z"></path><path fill-rule="evenodd" d="M2 6a2 2 0 012-2h4a1 1 0 010 2H4v10h10v-4a1 1 0 112 0v4a2 2 0 01-2 2H4a2 2 0 01-2-2V6z" clip-rule="evenodd"></path></svg>
+                        </button>
                     </div>
                     <!-- Budget content goes here -->
                     <div class="mt-4 grid grid-cols-2 gap-4">
                         <div class="col items-center justify-between">
                             <p class="py-2">Budget amount</p>
-                            <p class="text-lg font-semibold text-black-400">$700.00</p>
+                            <p class="text-lg font-semibold text-black-400">${{ .Fields.MonthlyBudget }}</p>
                         </div>
                         <div class="col items-center justify-between">
                             <p class="py-2">Budget amount remaining</p>
-                            <p class="text-lg font-semibold text-green-500">$300.00</p>
+                            <p class="text-lg font-semibold text-green-500">${{ .Fields.RemainingBudget }}</p>
                         </div>
                     </div>
                 </div>
@@ -86,14 +89,18 @@
                 <div class="bg-white p-4 rounded-lg shadow h-40 relative w-full">
                     <h2 class="text-xl font-semibold">Current balance</h2>
                     <!-- Balance content goes here -->
-                    <div class="mt-4 grid grid-cols-2 gap-4">
+                    <div class="mt-4 grid grid-cols-3 gap-4">
                         <div class="col items-center justify-between">
                             <p class="py-2">Total amount</p>
-                            <p class="text-lg font-semibold text-black-400">$23345.33</p>
+                            <p class="text-lg font-semibold text-black-400">${{ .Fields.Balance }}</p>
                         </div>
                         <div class="col items-center justify-between">
                             <p class="py-2">Expenses</p>
-                            <p class="text-lg font-semibold text-red-500">$2005.33</p>
+                            <p class="text-lg font-semibold text-red-500">${{ .Fields.TodayExpenses }}</p>
+                        </div> 
+                        <div class="col items-center justify-between">
+                            <p class="py-2">Incomes</p>
+                            <p class="text-lg font-semibold text-green-500">${{ .Fields.TodayIncome }}</p>
                         </div>
                     </div>
                 </div>
@@ -122,8 +129,8 @@
                             <td class="px-6 py-3 text-sm font-normal text-gray-500 whitespace-nowrap dark:text-gray-400">
                                 <div class="text-base font-semibold text-gray-900 dark:text-white">🛒 Groceries</div>
                             </td>
-                            <td class="px-6 py-3 text-base font-semibold text-gray-900 dark:text-white">$250.00</td>
-                            <td class="px-6 py-3 text-base font-semibold text-gray-900 dark:text-white">$100.00</td>
+                            <td class="px-6 py-3 text-base font-semibold text-gray-900 dark:text-white">${{ .Fields.GroceriesBudget }}</td>
+                            <td class="px-6 py-3 text-base font-semibold text-gray-900 dark:text-white">${{ .Fields.GroceriesBudgetRemaining }}</td>
                             <td class="px-6 py-3 space-x-2 whitespace-nowrap">
                                 <button type="button" class="updateProductButton inline-flex items-center px-3 py-2 text-sm font-medium text-center text-white rounded-lg bg-blue-500 hover:bg-blue-600 focus:ring-4 focus:ring-blue-300 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">
                                     <svg class="w-4 h-4 mr-2" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path d="M17.414 2.586a2 2 0 00-2.828 0L7 10.172V13h2.828l7.586-7.586a2 2 0 000-2.828z"></path><path fill-rule="evenodd" d="M2 6a2 2 0 012-2h4a1 1 0 010 2H4v10h10v-4a1 1 0 112 0v4a2 2 0 01-2 2H4a2 2 0 01-2-2V6z" clip-rule="evenodd"></path></svg>
@@ -135,8 +142,8 @@
                             <td class="px-6 py-3 text-sm font-normal text-gray-500 whitespace-nowrap dark:text-gray-400">
                                 <div class="text-base font-semibold text-gray-900 dark:text-white">⚕️ Healthcare</div>
                             </td>
-                            <td class="px-6 py-3 text-base font-semibold text-gray-900 dark:text-white">$150.00</td>
-                            <td class="px-6 py-3 text-base font-semibold text-gray-900 dark:text-white">$100.00</td>
+                            <td class="px-6 py-3 text-base font-semibold text-gray-900 dark:text-white">${{ .Fields.HealthcareBudget }}</td>
+                            <td class="px-6 py-3 text-base font-semibold text-gray-900 dark:text-white">${{ .Fields.HealthcareBudgetRemaining }}</td>
                             <td class="px-6 py-3 space-x-2 whitespace-nowrap">
                                 <button type="button" class="updateProductButton inline-flex items-center px-3 py-2 text-sm font-medium text-center text-white rounded-lg bg-blue-500 hover:bg-blue-600 focus:ring-4 focus:ring-blue-300 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">
                                     <svg class="w-4 h-4 mr-2" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path d="M17.414 2.586a2 2 0 00-2.828 0L7 10.172V13h2.828l7.586-7.586a2 2 0 000-2.828z"></path><path fill-rule="evenodd" d="M2 6a2 2 0 012-2h4a1 1 0 010 2H4v10h10v-4a1 1 0 112 0v4a2 2 0 01-2 2H4a2 2 0 01-2-2V6z" clip-rule="evenodd"></path></svg>
@@ -148,8 +155,8 @@
                             <td class="px-6 py-3 text-sm font-normal text-gray-500 whitespace-nowrap dark:text-gray-400">
                                 <div class="text-base font-semibold text-gray-900 dark:text-white">🚗 Transport</div>
                             </td>
-                            <td class="px-6 py-3 text-base font-semibold text-gray-900 dark:text-white">$100.00</td>
-                            <td class="px-6 py-3 text-base font-semibold text-gray-900 dark:text-white">$100.00</td>
+                            <td class="px-6 py-3 text-base font-semibold text-gray-900 dark:text-white">${{ .Fields.TransportBudget }}</td>
+                            <td class="px-6 py-3 text-base font-semibold text-gray-900 dark:text-white">${{ .Fields.TransportBudgetRemaining }}</td>
                             <td class="px-6 py-3 space-x-2 whitespace-nowrap">
                                 <button type="button" class="updateProductButton inline-flex items-center px-3 py-2 text-sm font-medium text-center text-white rounded-lg bg-blue-500 hover:bg-blue-600 focus:ring-4 focus:ring-blue-300 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">
                                     <svg class="w-4 h-4 mr-2" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path d="M17.414 2.586a2 2 0 00-2.828 0L7 10.172V13h2.828l7.586-7.586a2 2 0 000-2.828z"></path><path fill-rule="evenodd" d="M2 6a2 2 0 012-2h4a1 1 0 010 2H4v10h10v-4a1 1 0 112 0v4a2 2 0 01-2 2H4a2 2 0 01-2-2V6z" clip-rule="evenodd"></path></svg>
@@ -161,8 +168,8 @@
                             <td class="px-6 py-3 text-sm font-normal text-gray-500 whitespace-nowrap dark:text-gray-400">
                                 <div class="text-base font-semibold text-gray-900 dark:text-white">👗 Clothing</div>
                             </td>
-                            <td class="px-6 py-3 text-base font-semibold text-gray-900 dark:text-white">$200.00</td>
-                            <td class="px-6 py-3 text-base font-semibold text-gray-900 dark:text-white">$100.00</td>
+                            <td class="px-6 py-3 text-base font-semibold text-gray-900 dark:text-white">${{ .Fields.ClothingBudget }}</td>
+                            <td class="px-6 py-3 text-base font-semibold text-gray-900 dark:text-white">${{ .Fields.ClothingBudgetRemaining }}</td>
                             <td class="px-6 py-3 space-x-2 whitespace-nowrap">
                                 <button type="button" class="updateProductButton inline-flex items-center px-3 py-2 text-sm font-medium text-center text-white rounded-lg bg-blue-500 hover:bg-blue-600 focus:ring-4 focus:ring-blue-300 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">
                                     <svg class="w-4 h-4 mr-2" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path d="M17.414 2.586a2 2 0 00-2.828 0L7 10.172V13h2.828l7.586-7.586a2 2 0 000-2.828z"></path><path fill-rule="evenodd" d="M2 6a2 2 0 012-2h4a1 1 0 010 2H4v10h10v-4a1 1 0 112 0v4a2 2 0 01-2 2H4a2 2 0 01-2-2V6z" clip-rule="evenodd"></path></svg>
@@ -174,8 +181,8 @@
                             <td class="px-6 py-3 text-sm font-normal text-gray-500 whitespace-nowrap dark:text-gray-400">
                                 <div class="text-base font-semibold text-gray-900 dark:text-white">🎬 Entertainment</div>
                             </td>
-                            <td class="px-6 py-3 text-base font-semibold text-gray-900 dark:text-white">$300.00</td>
-                            <td class="px-6 py-3 text-base font-semibold text-gray-900 dark:text-white">$100.00</td>
+                            <td class="px-6 py-3 text-base font-semibold text-gray-900 dark:text-white">${{ .Fields.EntertainmentBudget }}</td>
+                            <td class="px-6 py-3 text-base font-semibold text-gray-900 dark:text-white">${{ .Fields.EntertainmentBudgetRemaining }}</td>
                             <td class="px-6 py-3 space-x-2 whitespace-nowrap">
                                 <button type="button" class="updateProductButton inline-flex items-center px-3 py-2 text-sm font-medium text-center text-white rounded-lg bg-blue-500 hover:bg-blue-600 focus:ring-4 focus:ring-blue-300 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">
                                     <svg class="w-4 h-4 mr-2" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path d="M17.414 2.586a2 2 0 00-2.828 0L7 10.172V13h2.828l7.586-7.586a2 2 0 000-2.828z"></path><path fill-rule="evenodd" d="M2 6a2 2 0 012-2h4a1 1 0 010 2H4v10h10v-4a1 1 0 112 0v4a2 2 0 01-2 2H4a2 2 0 01-2-2V6z" clip-rule="evenodd"></path></svg>
@@ -187,8 +194,8 @@
                             <td class="px-6 py-3 text-sm font-normal text-gray-500 whitespace-nowrap dark:text-gray-400">
                                 <div class="text-base font-semibold text-gray-900 dark:text-white">🍽️ Dining</div>
                             </td>
-                            <td class="px-6 py-3 text-base font-semibold text-gray-900 dark:text-white">$120.00</td>
-                            <td class="px-6 py-3 text-base font-semibold text-gray-900 dark:text-white">$100.00</td>
+                            <td class="px-6 py-3 text-base font-semibold text-gray-900 dark:text-white">${{ .Fields.DiningBudget }}</td>
+                            <td class="px-6 py-3 text-base font-semibold text-gray-900 dark:text-white">${{ .Fields.DiningBudgetRemaining }}</td>
                             <td class="px-6 py-3 space-x-2 whitespace-nowrap">
                                 <button type="button" class="updateProductButton inline-flex items-center px-3 py-2 text-sm font-medium text-center text-white rounded-lg bg-blue-500 hover:bg-blue-600 focus:ring-4 focus:ring-blue-300 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">
                                     <svg class="w-4 h-4 mr-2" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path d="M17.414 2.586a2 2 0 00-2.828 0L7 10.172V13h2.828l7.586-7.586a2 2 0 000-2.828z"></path><path fill-rule="evenodd" d="M2 6a2 2 0 012-2h4a1 1 0 010 2H4v10h10v-4a1 1 0 112 0v4a2 2 0 01-2 2H4a2 2 0 01-2-2V6z" clip-rule="evenodd"></path></svg>
@@ -200,8 +207,8 @@
                             <td class="px-6 py-3 text-sm font-normal text-gray-500 whitespace-nowrap dark:text-gray-400">
                                 <div class="text-base font-semibold text-gray-900 dark:text-white">💡 Utilities</div>
                             </td>
-                            <td class="px-6 py-3 text-base font-semibold text-gray-900 dark:text-white">$180.00</td>
-                            <td class="px-6 py-3 text-base font-semibold text-gray-900 dark:text-white">$100.00</td>
+                            <td class="px-6 py-3 text-base font-semibold text-gray-900 dark:text-white">${{ .Fields.UtilitiesBudget }}</td>
+                            <td class="px-6 py-3 text-base font-semibold text-gray-900 dark:text-white">${{ .Fields.UtilitiesBudgetRemaining }}</td>
                             <td class="px-6 py-3 space-x-2 whitespace-nowrap">
                                 <button type="button" class="updateProductButton inline-flex items-center px-3 py-2 text-sm font-medium text-center text-white rounded-lg bg-blue-500 hover:bg-blue-600 focus:ring-4 focus:ring-blue-300 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">
                                     <svg class="w-4 h-4 mr-2" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path d="M17.414 2.586a2 2 0 00-2.828 0L7 10.172V13h2.828l7.586-7.586a2 2 0 000-2.828z"></path><path fill-rule="evenodd" d="M2 6a2 2 0 012-2h4a1 1 0 010 2H4v10h10v-4a1 1 0 112 0v4a2 2 0 01-2 2H4a2 2 0 01-2-2V6z" clip-rule="evenodd"></path></svg>

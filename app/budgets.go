@@ -1,6 +1,8 @@
 package app
 
-import "time"
+import (
+	"time"
+)
 
 type BudgetService struct {
 	repository BudgetRepository
@@ -15,6 +17,7 @@ func NewBudgetService(br BudgetRepository) *BudgetService {
 type BudgetRepository interface {
 	GetBudgetByUserIdMonthAndCategory(userId int, date string, category string) (Budget, error)
 	GetBudgetsByUserIdAndMonth(userId int, date string) ([]Budget, error)
+	UpdateBudget(userId int, category string, amount float64) error
 }
 
 type Budget struct {
@@ -42,4 +45,8 @@ func (s *BudgetService) GetBudgetsByUserIdAndMonth(userId int, date string) (map
 		budgetMap[budget.Category] = budget
 	}
 	return budgetMap, nil
+}
+
+func (s *BudgetService) UpdateBudget(userId int, category string, amount float64) error {
+	return s.repository.UpdateBudget(userId, category, amount)
 }

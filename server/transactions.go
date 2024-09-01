@@ -27,9 +27,10 @@ func (s *Server) handleTransactionsPage(w http.ResponseWriter, r *http.Request) 
 		user, _ := s.GetUserInfoFromIDToken(session.IdToken)
 		userId := user.ID
 
-		today := time.Now().Format("2006-01-02")
+		today := time.Now()
+		firstDayOfMonth := time.Date(today.Year(), today.Month(), 1, 0, 0, 0, 0, today.Location()).Format("2006-01-02")
 
-		transactionResponse, err := s.client.GetUserTransactions(userId, accessToken, today, "")
+		transactionResponse, err := s.client.GetUserTransactions(userId, accessToken, firstDayOfMonth, "")
 		if err != nil {
 			log.Print(err.Error())
 		}

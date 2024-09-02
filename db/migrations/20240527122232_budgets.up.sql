@@ -2,12 +2,11 @@ CREATE TYPE budget_category AS ENUM (
     'monthly',
     'groceries',
     'healthcare',
-    'rent',
-    'utilities',
-    'savings',
-    'transportation',
     'clothing',
-    'personal_care'
+    'entertainment',
+    'dining',
+    'transport',
+    'utilities'
 );
 
 CREATE TABLE budgets (
@@ -15,6 +14,8 @@ CREATE TABLE budgets (
     user_id int NOT NULL,
     category budget_category NOT NULL,
     amount NUMERIC(10, 2) NOT NULL,
-    month DATE NOT NULL,
-    update_stamp TIMESTAMP DEFAULT CURRENT_TIMESTAMP NOT NULL
+    month DATE NOT NULL
 );
+
+ALTER TABLE budgets
+ADD CONSTRAINT unique_user_category UNIQUE (user_id, category);

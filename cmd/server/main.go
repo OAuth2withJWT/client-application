@@ -8,7 +8,14 @@ import (
 	"github.com/OAuth2withJWT/client-application/app/postgres"
 	"github.com/OAuth2withJWT/client-application/db"
 	"github.com/OAuth2withJWT/client-application/server"
+	"github.com/joho/godotenv"
 )
+
+func init() {
+	if err := godotenv.Load(); err != nil {
+		log.Fatalf("Error loading .env file: %v", err)
+	}
+}
 
 func main() {
 	db, err := db.Connect()
@@ -18,9 +25,11 @@ func main() {
 	defer db.Close()
 
 	budgetRepository := postgres.NewBudgetRepository(db)
+	sessionRepository := postgres.NewSessionRepository(db)
 
 	app := app.Application{
-		BudgetService: app.NewBudgetService(budgetRepository),
+		BudgetService:  app.NewBudgetService(budgetRepository),
+		SessionService: app.NewSessionService(sessionRepository),
 	}
 
 	api := api.Client{}

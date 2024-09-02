@@ -19,7 +19,7 @@ func NewBudgetRepository(db *sql.DB) *BudgetRepository {
 
 func (br *BudgetRepository) GetBudgetByUserIdMonthAndCategory(userId int, date string, category string) (app.Budget, error) {
 	var budget app.Budget
-	err := br.db.QueryRow("SELECT category, amount, update_stamp FROM budgets WHERE user_id = $1 AND category=$2 AND EXTRACT(MONTH FROM month) = EXTRACT(MONTH FROM DATE '"+date+"') AND EXTRACT(YEAR FROM month) = EXTRACT(YEAR FROM DATE '"+date+"');", userId, category).Scan(&budget.Category, &budget.Amount, &budget.UpdateStamp)
+	err := br.db.QueryRow("SELECT category, amount FROM budgets WHERE user_id = $1 AND category=$2 AND EXTRACT(MONTH FROM month) = EXTRACT(MONTH FROM DATE '"+date+"') AND EXTRACT(YEAR FROM month) = EXTRACT(YEAR FROM DATE '"+date+"');", userId, category).Scan(&budget.Category, &budget.Amount)
 	if err != nil {
 		return app.Budget{}, err
 	}
@@ -27,7 +27,7 @@ func (br *BudgetRepository) GetBudgetByUserIdMonthAndCategory(userId int, date s
 }
 
 func (br *BudgetRepository) GetBudgetsByUserIdAndMonth(userId int, date string) ([]app.Budget, error) {
-	rows, err := br.db.Query("SELECT category, amount, update_stamp FROM budgets WHERE user_id = $1 AND EXTRACT(MONTH FROM month) = EXTRACT(MONTH FROM DATE '"+date+"') AND EXTRACT(YEAR FROM month) = EXTRACT(YEAR FROM DATE '"+date+"');", userId)
+	rows, err := br.db.Query("SELECT category, amount FROM budgets WHERE user_id = $1 AND EXTRACT(MONTH FROM month) = EXTRACT(MONTH FROM DATE '"+date+"') AND EXTRACT(YEAR FROM month) = EXTRACT(YEAR FROM DATE '"+date+"');", userId)
 	if err != nil {
 		return []app.Budget{}, err
 	}
@@ -35,7 +35,7 @@ func (br *BudgetRepository) GetBudgetsByUserIdAndMonth(userId int, date string) 
 	var budgets []app.Budget
 	for rows.Next() {
 		var budget app.Budget
-		err := rows.Scan(&budget.Category, &budget.Amount, &budget.UpdateStamp)
+		err := rows.Scan(&budget.Category, &budget.Amount)
 		if err != nil {
 			log.Fatal(err)
 		}
@@ -46,6 +46,12 @@ func (br *BudgetRepository) GetBudgetsByUserIdAndMonth(userId int, date string) 
 }
 
 func (br *BudgetRepository) UpdateBudget(userId int, category string, amount float64) error {
-	_, err := br.db.Exec(`UPDATE budgets SET amount = $3 where user_id = $1 AND category = $2`, userId, category, amount)
+	_, err := br.db.Exec(`
+		INSERT INTO budgets (user_id, category, amount, month)
+		VALUES ($1, $2, $3, CURRENT_DATE)
+		ON CONFLICT (user_id, category) 
+		DO UPDATE SET amount = EXCLUDED.amount`,
+		userId, category, amount,
+	)
 	return err
 }

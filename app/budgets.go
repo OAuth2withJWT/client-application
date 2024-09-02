@@ -1,9 +1,5 @@
 package app
 
-import (
-	"time"
-)
-
 type BudgetService struct {
 	repository BudgetRepository
 }
@@ -21,9 +17,8 @@ type BudgetRepository interface {
 }
 
 type Budget struct {
-	Category    string
-	Amount      float64
-	UpdateStamp time.Time
+	Category string
+	Amount   float64
 }
 
 func (s *BudgetService) GetBudgetByUserIdMonthAndCategory(userId int, date string, category string) (Budget, error) {
